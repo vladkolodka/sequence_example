@@ -6,24 +6,19 @@ export default function SequenceManager({items}) {
     }
 
     const [currentItemIndex, setCurrentItemIndex] = useState(0);
-    const [itemData, setItemData] = useState([]);
     const [currentData, setCurrentData] = useState(null);
 
     // reset effect
     useEffect(() => {
-        setItemData([]);
+        setCurrentData(null);
         setCurrentItemIndex(0);
     }, [items]);
-
-    useEffect(() => {
-        setCurrentData(itemData.length ? itemData[itemData.length - 1] : null);
-    }, [itemData]);
 
     const next = useCallback((data) => {
         if (currentItemIndex + 1 < items.length) {
             if(data !== undefined) {
                 console.log('set data');
-                setItemData([...itemData, data]);
+                setCurrentData(data);
             }
 
             setCurrentItemIndex(currentItemIndex + 1);
@@ -31,25 +26,23 @@ export default function SequenceManager({items}) {
             alert('exit');
         }
         console.log('next', currentItemIndex, data);
-    }, [currentItemIndex, itemData, items.length]);
+    }, [currentItemIndex, items.length]);
 
-    const prev = useCallback(() => {
+    const prev = useCallback((data) => {
         console.log('prev', currentItemIndex);
 
         if (currentItemIndex - 1 >= 0) {
-            itemData.pop();
-            
-            setItemData(itemData);
-
+            setCurrentData(data);
 
             setCurrentItemIndex(currentItemIndex - 1);
         } else {
             alert('exit');
         }
-    }, [currentItemIndex, itemData]);
+    }, [currentItemIndex]);
 
     const CurrentItem = items[currentItemIndex];
 
+    console.log('current data', currentData);
     return <div>
         <h1>Sequence manager</h1>
         <CurrentItem next={next} prev={prev} data={currentData}/>

@@ -9,16 +9,19 @@ export default function Item1({next, prev, data}) {
             date: Date()
         };
 
-        next(data || newData);
+        next({
+            formData: data ? data.formData : newData
+        });
     }
 
     return <div>
         <h1>Item 1</h1>
 
         {data && <div>
-            <div>{data.name}</div>
-            <div>{data.age}</div>
-            <div>{data.date}</div>
+        <pre>
+            {JSON.stringify(data, null, 2)}
+        </pre>
+
         </div>}
 
         <button onClick={prev}>cancel (end)</button>
